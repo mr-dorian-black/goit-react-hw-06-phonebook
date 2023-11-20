@@ -1,4 +1,5 @@
 import { Formik } from 'formik';
+import { nanoid } from 'nanoid';
 import * as Yup from 'yup';
 import {
   StyledForm,
@@ -7,6 +8,8 @@ import {
   StyledField,
   StyledErrorMessage,
 } from './ContactForm.styled';
+import { addContact } from 'redux/phonebook-slice';
+import { useDispatch } from 'react-redux';
 
 const phonebookSchema = Yup.object().shape({
   name: Yup.string().required('This field is required!'),
@@ -15,13 +18,14 @@ const phonebookSchema = Yup.object().shape({
     .required('This field is required!'),
 });
 
-export const ContactForm = ({ onAddContact }) => {
+export const ContactForm = () => {
+  const dispatch = useDispatch();
   return (
     <Formik
       initialValues={{ name: '', number: '' }}
       validationSchema={phonebookSchema}
       onSubmit={(values, actions) => {
-        onAddContact(values);
+        dispatch(addContact({ ...{ id: nanoid() }, ...values }));
         actions.resetForm();
       }}
     >
