@@ -14,7 +14,6 @@ export const ContactList = ({ items }) => {
             <StyledButton
               type="button"
               onClick={() => {
-                console.log(item.id);
                 dispatch(removeContact(item.id));
               }}
             >

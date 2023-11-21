@@ -1,3 +1,4 @@
+import { selectFilters, selectContacts } from 'redux/selectors';
 import { ContactForm } from './ContactForm/ContactForm';
 import { ContactList } from './ContactList/ContactList';
 import { Filter } from './Filter/Filter';
@@ -5,8 +6,8 @@ import { StyledTitle } from './Filter/Filter.styled';
 import { useSelector } from 'react-redux';
 
 export const App = () => {
-  const filter = useSelector(state => state.filter.filter);
-  const contacts = useSelector(state => state.phonebook.contacts);
+  const filter = useSelector(selectFilters);
+  const contacts = useSelector(selectContacts);
 
   const filteredContacts = contacts.filter(contact =>
     contact.name.toLowerCase().includes(filter.toLowerCase())

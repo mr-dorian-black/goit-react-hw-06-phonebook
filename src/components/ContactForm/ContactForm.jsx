@@ -9,7 +9,8 @@ import {
   StyledErrorMessage,
 } from './ContactForm.styled';
 import { addContact } from 'redux/phonebook-slice';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectContacts } from 'redux/selectors';
 
 const phonebookSchema = Yup.object().shape({
   name: Yup.string().required('This field is required!'),
@@ -19,15 +20,26 @@ const phonebookSchema = Yup.object().shape({
 });
 
 export const ContactForm = () => {
+  const contacts = useSelector(selectContacts);
   const dispatch = useDispatch();
+
+  const handleSubmit = (values, actions) => {
+    if (
+      contacts.some(
+        contact => contact.name.toLowerCase() === values.name.toLowerCase()
+      )
+    ) {
+      return alert(`${values.name} is already in contacts!`);
+    }
+    dispatch(addContact({ ...{ id: nanoid() }, ...values }));
+    actions.resetForm();
+  };
+
   return (
     <Formik
       initialValues={{ name: '', number: '' }}
       validationSchema={phonebookSchema}
-      onSubmit={(values, actions) => {
-        dispatch(addContact({ ...{ id: nanoid() }, ...values }));
-        actions.resetForm();
-      }}
+      onSubmit={handleSubmit}
     >
       <StyledForm>
         <StyledLabel>
